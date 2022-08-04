@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import { findItemIndexById } from "./findItemById";
 import { DragItem } from "./dragItem";
-
+import { moveItem } from "./moveItem";
 export const appData: AppState = {
   lists: [
     {
@@ -20,10 +20,12 @@ export const appData: AppState = {
       tasks: [{ id: "c3", text: "Begin to use static typing" }],
     },
   ],
+  draggedItem: {},
 };
 
 export interface AppState {
   lists: List[];
+  draggedItem: object | undefined;
 }
 
 interface Task {
@@ -61,16 +63,16 @@ export type Action =
 export const appStateReducer = (state: AppState, action: Action): AppState => {
   switch (action.type) {
     case "ADD_LIST": {
+      if (action.payload !== "") {
+        state.lists.push({
+          id: uuidv4(),
+          title: action.payload,
+          tasks: [],
+        });
+      }
       return {
         ...state,
-        lists: [
-          ...state.lists,
-          {
-            id: uuidv4(),
-            title: action.payload,
-            tasks: [],
-          },
-        ],
+        lists: [...state.lists],
       };
     }
     case "ADD_TASK": {
@@ -91,7 +93,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
 
     case "MOVE_LIST": {
       const { dragIndex, hoverIndex } = action.payload;
-      // state.lists = moveItem(state.lists, dragIndex, hoverIndex);
+      state.lists = moveItem(state.lists, dragIndex, hoverIndex);
       return {
         ...state,
       };
@@ -100,7 +102,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
     case "SET_DRAGGED_ITEM": {
       return {
         ...state,
-        // draggedItem: action.payload,
+        draggedItem: action.payload,
       };
     }
     default: {

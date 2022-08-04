@@ -6,8 +6,7 @@ export const useItemDrag = (item: DragItem) => {
   const { dispatch } = useAppState();
   const [, drag] = useDrag(() => ({
     type: item.type,
-    item: item.title,
-    begin: () =>
+    item: () =>
       dispatch({
         type: "SET_DRAGGED_ITEM",
         payload: item,
