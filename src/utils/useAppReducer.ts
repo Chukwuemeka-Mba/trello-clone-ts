@@ -105,7 +105,6 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
     }
 
     case "SET_DRAGGED_ITEM": {
-      console.log(action.payload);
       return {
         ...state,
         draggedItem: action.payload,

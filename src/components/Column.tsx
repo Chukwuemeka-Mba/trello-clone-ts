@@ -7,12 +7,14 @@ import { useItemDrag } from "../utils/useItemDrag";
 import { useDrop } from "react-dnd";
 import { DragItem } from "../utils/dragItem";
 import { isHidden } from "../utils/isHidden";
+
 interface ColumnProps {
   title?: string;
   index: number;
   id: string;
+  isPreview?: boolean;
 }
-export const Column = ({ title, index, id }: ColumnProps) => {
+export const Column = ({ title, index, id, isPreview }: ColumnProps) => {
   const { state, dispatch } = useAppState();
   const ref = useRef<HTMLDivElement>(null);
   const { drag } = useItemDrag({
@@ -38,7 +40,8 @@ export const Column = ({ title, index, id }: ColumnProps) => {
   return (
     <ColumnContainer
       ref={ref}
-      isHidden={isHidden(state.draggedItem, "COLUMN", id)}
+      isPreview={isPreview}
+      isHidden={isHidden(isPreview, state.draggedItem, "COLUMN", id)}
     >
       <ColumnTitle>{title}</ColumnTitle>
       {state.lists[index].tasks.map(({ text, id }) => (
