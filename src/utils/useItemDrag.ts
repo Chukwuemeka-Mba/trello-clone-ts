@@ -4,14 +4,12 @@ import { DragItem } from "./dragItem";
 
 export const useItemDrag = (item: DragItem) => {
   const { dispatch } = useAppState();
-  const [, drag] = useDrag(() => ({
+  const [{ isDragging }, drag] = useDrag(() => ({
     type: item.type,
-    item: () =>
-      dispatch({
-        type: "SET_DRAGGED_ITEM",
-        payload: item,
-      }),
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging(),
+    }),
     end: () => dispatch({ type: "SET_DRAGGED_ITEM", payload: undefined }),
   }));
-  return { drag };
+  return { drag, isDragging };
 };

@@ -20,12 +20,17 @@ export const appData: AppState = {
       tasks: [{ id: "c3", text: "Begin to use static typing" }],
     },
   ],
-  draggedItem: {},
+  draggedItem: {
+    index: 0,
+    id: "",
+    title: "",
+    type: "COLUMN",
+  },
 };
 
 export interface AppState {
   lists: List[];
-  draggedItem: object | undefined;
+  draggedItem: DragItem | undefined;
 }
 
 interface Task {
@@ -100,6 +105,7 @@ export const appStateReducer = (state: AppState, action: Action): AppState => {
     }
 
     case "SET_DRAGGED_ITEM": {
+      console.log(action.payload);
       return {
         ...state,
         draggedItem: action.payload,
